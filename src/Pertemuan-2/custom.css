@@ -1,0 +1,154 @@
+/* Import font modern (Poppins) dan elegan (Cormorant Garamond) */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Poppins:wght@300;400;600&display=swap');
+
+/* --- 1. ANIMASI KEYFRAMES --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* --- 2. LAYOUT DASAR --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle, #4a0404 0%, #2e0101 100%);
+    color: #e0d4d4;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: repeating-radial-gradient(circle at 0 0, transparent 0, #2e0101 10px), 
+                      repeating-linear-gradient(#3d020255, #3d0202);
+    overflow: hidden; /* Mencegah scroll saat animasi muncul */
+}
+
+/* --- 3. KARTU UTAMA (POP-UP EFFECT) --- */
+.card {
+    max-width: 500px;
+    width: 90%;
+    background-color: #5c0505;
+    padding: 50px 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    
+    /* Animasi Masuk & Transisi */
+    animation: fadeInUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efek Hover (Interaksi Pop-Up) */
+.card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 
+                0 0 30px rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    cursor: pointer;
+}
+
+/* Efek Kilauan (Shine) saat Hover */
+.card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.1), transparent);
+    transform: skewX(-25deg);
+    transition: 0s;
+}
+
+.card:hover::after {
+    animation: shine 1.5s infinite;
+}
+
+/* --- 4. DEKORASI ESTETIK --- */
+.card::before {
+    content: "✦ ✧ ✦";
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    color: #ffd700;
+    opacity: 0.6;
+    letter-spacing: 5px;
+}
+
+.deco-circle {
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 215, 0, 0.05);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+/* --- 5. TIPOGRAFI --- */
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    color: #ffd700;
+    font-size: clamp(28px, 5vw, 38px);
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    transition: all 0.4s ease;
+}
+
+.card:hover h1 {
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #d8c3c3;
+    font-weight: 300;
+    text-align: justify;
+    position: relative;
+    z-index: 1;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #ffd700, transparent);
+    margin: 30px 0;
+    opacity: 0.5;
+}
+
+small {
+    display: block;
+    font-style: italic;
+    text-align: center;
+    color: #ffd700;
+    opacity: 0.8;
+    letter-spacing: 2px;
+    font-weight: 300;
+}
