@@ -11,6 +11,7 @@ export default function Sidebar() {
         
     return (
         <div id="sidebar" className="flex min-h-screen w-90 flex-col bg-white p-10 shadow-lg">
+            
             {/* Logo */}
             <div id="sidebar-logo" className="flex flex-col">
                 <span id="logo-title" className="font-poppins text-[48px] text-gray-900 leading-tight">
@@ -22,24 +23,48 @@ export default function Sidebar() {
             {/* List Menu */}
             <div id="sidebar-menu" className="mt-10">
                 <ul id="menu-list" className="space-y-3">
+                    
                     <li>
                         <NavLink id="menu-1" to="/" className={menuClass}>
                             <LuLayoutDashboard className="mr-4 text-xl" /> Dashboard
                         </NavLink>
                     </li>
+
                     <li>
                         <NavLink id="menu-2" to="/Orders" className={menuClass}>
                             <LuListOrdered className="mr-4 text-xl" /> Orders
                         </NavLink>
                     </li>
+
                     <li>
                         <NavLink id="menu-3" to="/Customers" className={menuClass}>
                             <LuUsers className="mr-4 text-xl" /> Customers
                         </NavLink>
                     </li>
+
+                    {/* 🔥 TAMBAHAN SESUAI TUGAS */}
+                    <li>
+                        <NavLink to="/error-400" className={menuClass}>
+                            ⚠️ Error 400
+                        </NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink to="/error-401" className={menuClass}>
+                            🔒 Error 401
+                        </NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink to="/error-403" className={menuClass}>
+                            ⛔ Error 403
+                        </NavLink>
+                    </li>
+
                 </ul>
             </div>
 
+            {/* bagian bawah tetap */}
             <div className="mt-10 mb-5 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                 <div className="flex justify-between text-[10px] font-bold mb-2">
                     <span className="text-gray-400 uppercase tracking-widest">Daily Sales Target</span>
@@ -50,7 +75,6 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            {/* 3. FOOTER SECTION (Kembali utuh seperti aslinya + sedikit perbaikan posisi) */}
             <div id="sidebar-footer" className="mt-auto">
                 <div id="footer-card" className="bg-hijau px-4 py-6 rounded-3xl shadow-lg mb-10 flex items-center relative overflow-hidden">
                     <div id="footer-text" className="text-white text-sm z-10 w-2/3">
@@ -61,7 +85,7 @@ export default function Sidebar() {
                             </span>
                         </div>
                     </div>
-                    {/* Foto Profil disesuaikan posisinya agar rapi */}
+
                     <img 
                         className="w-16 h-16 rounded-full object-cover border-2 border-white/50 ml-auto shadow-md" 
                         src="/img/foto.png" 
@@ -70,10 +94,10 @@ export default function Sidebar() {
                 </div>
                 
                 <div className="flex flex-col">
-                    <span id="footer-brand" className="font-bold text-gray-800 text-sm italic">
+                    <span className="font-bold text-gray-800 text-sm italic">
                         Sedap Restaurant Admin Dashboard
                     </span>
-                    <p id="footer-copyright" className="font-light text-gray-400 text-[10px] tracking-wide">
+                    <p className="font-light text-gray-400 text-[10px] tracking-wide">
                         © 2026 All Right Reserved
                     </p>
                 </div>

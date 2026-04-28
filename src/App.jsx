@@ -3,8 +3,10 @@ import React from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./assets/tailwind.css";
-import { Route, Routes } from "react-router-dom";
 import Loading from "./components/Loading";
+import { Route, Routes } from "react-router-dom";
+import Forgot from "./pages/auth/Forgot";
+
 //import Dashboard from "./pages/Dashboard";
 //import Orders from "./pages/Orders";
 //import Customers from "./pages/Customers";
@@ -22,11 +24,12 @@ const MainLayout = React.lazy(() => import("./layouts/MainLayout"))
 const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"))
 const Login = React.lazy(() => import("./pages/auth/Login"))
 const Register = React.lazy(() => import("./pages/auth/Register"))
-const Forgot = React.lazy(() => import("./pages/auth/Forgot"))
+
 
 function App() {
   return (
-    <Suspense fallback={<Loading />}>
+
+  <Suspense fallback={<Loading />}>
     <Routes>
       {/* 1. Grup Main Layout */}
       <Route element={<MainLayout />}>
@@ -46,7 +49,7 @@ function App() {
       <Route path="*" element={<NotFound />} />
     </Routes>
     </Suspense>
-  );
+  )
 }
 
 export default App;
