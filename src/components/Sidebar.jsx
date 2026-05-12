@@ -1,4 +1,4 @@
-import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus } from "react-icons/lu";
+import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage } from "react-icons/lu";
 import { Link, NavLink } from "react-router-dom";
 
 export default function Sidebar() {
@@ -42,22 +42,31 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
+                    {/* MENU PRODUCTS BARU */}
+                    <li>
+                        <NavLink id="menu-4" to="/products" className={menuClass}>
+                            <LuPackage className="mr-4 text-xl" /> Products
+                        </NavLink>
+                    </li>
+
+                    <hr className="my-4 border-gray-100" />
+
                     {/* 🔥 TAMBAHAN SESUAI TUGAS */}
                     <li>
                         <NavLink to="/error-400" className={menuClass}>
-                            ⚠️ Error 400
+                            <span className="mr-4">⚠️</span> Error 400
                         </NavLink>
                     </li>
 
                     <li>
                         <NavLink to="/error-401" className={menuClass}>
-                            🔒 Error 401
+                            <span className="mr-4">🔒</span> Error 401
                         </NavLink>
                     </li>
 
                     <li>
                         <NavLink to="/error-403" className={menuClass}>
-                            ⛔ Error 403
+                            <span className="mr-4">⛔</span> Error 403
                         </NavLink>
                     </li>
 
