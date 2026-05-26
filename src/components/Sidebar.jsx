@@ -1,4 +1,4 @@
-import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage } from "react-icons/lu";
+import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage, LuNetwork } from "react-icons/lu"; // 🔥 Ditambahkan LuNetwork
 import { Link, NavLink } from "react-router-dom";
 
 export default function Sidebar() {
@@ -42,7 +42,14 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
-                    {/* MENU PRODUCTS BARU */}
+                    {/* 🔥 MENU FITUR XYZ BARU (Diletakkan di bawah Customers sesuai gambar) */}
+                    <li>
+                        <NavLink id="menu-fitur-xyz" to="/fitur-xyz" className={menuClass}>
+                            <LuNetwork className="mr-4 text-xl" /> Fitur Xyz
+                        </NavLink>
+                    </li>
+
+                    {/* MENU PRODUCTS */}
                     <li>
                         <NavLink id="menu-4" to="/products" className={menuClass}>
                             <LuPackage className="mr-4 text-xl" /> Products
@@ -51,7 +58,7 @@ export default function Sidebar() {
 
                     <hr className="my-4 border-gray-100" />
 
-                    {/* 🔥 TAMBAHAN SESUAI TUGAS */}
+                    {/* TAMBAHAN SESUAI TUGAS */}
                     <li>
                         <NavLink to="/error-400" className={menuClass}>
                             <span className="mr-4">⚠️</span> Error 400

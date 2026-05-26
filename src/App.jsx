@@ -8,7 +8,7 @@ import { Route, Routes } from "react-router-dom";
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Orders = React.lazy(() => import("./pages/Orders"));
 const Customers = React.lazy(() => import("./pages/Customer"));
-const Products = React.lazy(() => import("./pages/Products")); // Halaman ini akan menampung Tabel & Card
+const Products = React.lazy(() => import("./pages/Products")); 
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
@@ -16,6 +16,7 @@ const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
+const FiturXyz = React.lazy(() => import("./pages/FiturXyz"));
 
 function App() {
   return (
@@ -27,10 +28,10 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/customers" element={<Customers />} />
           
-          {/* UBAHAN DI SINI: 
-            Kita arahkan /products dan /products/:id ke komponen yang sama (Products)
-            supaya tabel dan card detail bisa muncul berdampingan di satu layar.
-          */}
+          {/* 🔥 SEHARUSNYA DI SINI (Di dalam MainLayout agar sidebar & layout dashboard tetap tampil) */}
+          <Route path="/fitur-xyz" element={<FiturXyz />} />
+          
+          {/* Route Products */}
           <Route path="/products" element={<Products />}/>
           <Route path="/products/:id" element={<ProductDetail />} />
         </Route>
