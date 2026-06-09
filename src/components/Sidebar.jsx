@@ -1,5 +1,5 @@
-import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage, LuNetwork } from "react-icons/lu"; // 🔥 Ditambahkan LuNetwork
-import { Link, NavLink } from "react-router-dom";
+import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage, LuNetwork, LuFileText } from "react-icons/lu"; // 🔥 Ditambahkan LuNetwork dan LuFileText
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
     const menuClass = ({ isActive }) =>
@@ -42,6 +42,14 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
+                       {/* MENU PRODUCTS */}
+                    <li>
+                        <NavLink id="menu-4" to="/products" className={menuClass}>
+                            <LuPackage className="mr-4 text-xl" /> Products
+                        </NavLink>
+                    </li>
+
+
                     {/* 🔥 MENU FITUR XYZ BARU (Diletakkan di bawah Customers sesuai gambar) */}
                     <li>
                         <NavLink id="menu-fitur-xyz" to="/fitur-xyz" className={menuClass}>
@@ -49,12 +57,13 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
-                    {/* MENU PRODUCTS */}
+                 
                     <li>
-                        <NavLink id="menu-4" to="/products" className={menuClass}>
-                            <LuPackage className="mr-4 text-xl" /> Products
+                        <NavLink id="menu-notes" to="/notes" className={menuClass}>
+                            <LuFileText className="mr-4 text-xl" /> Notes
                         </NavLink>
                     </li>
+
 
                     <hr className="my-4 border-gray-100" />
 

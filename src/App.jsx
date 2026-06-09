@@ -17,6 +17,7 @@ const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 const FiturXyz = React.lazy(() => import("./pages/FiturXyz"));
+const Notes = React.lazy(() => import("./pages/auth/Notes"));
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           
           {/* 🔥 SEHARUSNYA DI SINI (Di dalam MainLayout agar sidebar & layout dashboard tetap tampil) */}
           <Route path="/fitur-xyz" element={<FiturXyz />} />
+          <Route path="/notes" element={<Notes />} />
           
           {/* Route Products */}
           <Route path="/products" element={<Products />}/>
