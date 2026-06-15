@@ -1,118 +1,68 @@
-import axios from "axios";
-import { useState } from "react";
-import { BsFillExclamationDiamondFill } from "react-icons/bs";
-import { ImSpinner2 } from "react-icons/im";
-import { useNavigate } from "react-router-dom";
+﻿import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { authAPI } from "@/services/authAPI"
+import AlertBox from "@/components/AlertBox"
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [dataForm, setDataForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (evt) => {
-    const { name, value } = evt.target;
-    setDataForm({
-      ...dataForm,
-      [name]: value,
-    });
-  };
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    setError("")
+    if (!email || !password) {
+      setError("Email dan password harus diisi.")
+      return
+    }
 
-    setLoading(true);
-    setError(false);
-
-    axios
-      .post("https://dummyjson.com/user/login", {
-        username: dataForm.email,
-        password: dataForm.password,
-      })
-      .then((response) => {
-        // Jika status bukan 200, tampilkan pesan error
-        if (response.status !== 200) {
-          setError(response.data.message);
-          return;
-        }
-
-        // Redirect ke dashboard jika login sukses
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message || "An error occurred");
-        } else {
-          setError(err.message || "An unknown error occurred");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  const errorInfo = error ? (
-    <div className="bg-red-200 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center">
-      <BsFillExclamationDiamondFill className="text-red-600 me-2 text-lg" />
-      {error}
-    </div>
-  ) : null;
-
-  const loadingInfo = loading ? (
-    <div className="bg-gray-200 mb-5 p-5 text-sm rounded flex items-center">
-      <ImSpinner2 className="me-2 animate-spin" />
-      Mohon Tunggu...
-    </div>
-  ) : null;
+    try {
+      setLoading(true)
+      await authAPI.signIn(email, password)
+      navigate("/")
+    } catch (err) {
+      setError(err.message || "Invalid login credentials")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-        Welcome Back 👋
-      </h2>
-      {errorInfo}
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow">
+        <h2 className="text-2xl font-bold text-center mb-4">Welcome Back 👋</h2>
+        {error && <AlertBox type="danger" message={error} />}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm text-slate-500">Email Address</label>
+            <input
+              id="login-email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full mt-1 input"
+              type="email"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-500">Password</label>
+            <input
+              id="login-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full mt-1 input"
+              type="password"
+              placeholder="Your password"
+            />
+          </div>
 
-      {loadingInfo}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-5">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address
-          </label>
-          <input
-            type="text"
-            id="email"
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-            placeholder="you@example.com"
-             name="email"
-                onChange={handleChange}
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-            placeholder="********"
-            name="password"
-                onChange={handleChange}
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4
-                        rounded-lg transition duration-300"
-        >
-          Login
-        </button>
-      </form>
+          <button className="btn-primary w-full" disabled={loading}>
+            {loading ? "Loading..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
-  );
+  )
 }

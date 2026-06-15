@@ -1,6 +1,3 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./assets/tailwind.css";
 import Sidebar from "./layouts/Sidebar";
 import Header from "./layouts/Header";
@@ -10,8 +7,6 @@ import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     // Struktur wrapper utama dashboard
     <div id="app-container" className="bg-gray-100 min-h-screen flex">

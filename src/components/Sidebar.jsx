@@ -57,7 +57,12 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
-                 
+                    <li>
+                        <NavLink id="menu-users" to="/users" className={menuClass}>
+                            <LuUsers className="mr-4 text-xl" /> Users
+                        </NavLink>
+                    </li>
+
                     <li>
                         <NavLink id="menu-notes" to="/notes" className={menuClass}>
                             <LuFileText className="mr-4 text-xl" /> Notes

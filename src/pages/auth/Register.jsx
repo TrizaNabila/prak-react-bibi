@@ -1,67 +1,91 @@
+﻿import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { authAPI } from "@/services/authAPI"
+import AlertBox from "@/components/AlertBox"
+
 export default function Register() {
-    return (
-        <div>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-                Create Your Account ✨
-            </h2>
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirm, setConfirm] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
-            <form>
-                <div className="mb-5">
-                    <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                        Email Address
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="you@example.com"
-                    />
-                </div>
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+    if (!email || !password) {
+      setError("Email dan password harus diisi.")
+      return
+    }
+    if (password !== confirm) {
+      setError("Password dan konfirmasi tidak sama.")
+      return
+    }
 
-                <div className="mb-5">
-                    <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="********"
-                    />
-                </div>
+    try {
+      setLoading(true)
+      const res = await authAPI.signUp(email, password)
+      if (res && res.session) {
+        navigate("/")
+        return
+      }
+      setSuccess("Pendaftaran berhasil. Silakan login menggunakan akun yang baru dibuat.")
+      navigate("/login")
+    } catch (err) {
+      setError(err.message || "Gagal mendaftar.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
-                <div className="mb-6">
-                    <label
-                        htmlFor="confirmPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                        Confirm Password
-                    </label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
-                            placeholder-gray-400"
-                        placeholder="********"
-                    />
-                </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow">
+        <h2 className="text-2xl font-bold text-center mb-4">Create Account</h2>
+        {error && <AlertBox type="danger" message={error} />}
+        {success && <AlertBox type="success" message={success} />}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm text-slate-500">Email Address</label>
+            <input
+              id="register-email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full mt-1 input"
+              type="email"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-500">Password</label>
+            <input
+              id="register-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full mt-1 input"
+              type="password"
+              placeholder="Your password"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-500">Confirm Password</label>
+            <input
+              id="register-confirm"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="w-full mt-1 input"
+              type="password"
+              placeholder="Confirm password"
+            />
+          </div>
 
-                <button
-                    type="submit"
-                    className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4
-                        rounded-lg transition duration-300"
-                >
-                    Register
-                </button>
-            </form>
-        </div>
-    )
+          <button className="btn-primary w-full" disabled={loading}>
+            {loading ? "Loading..." : "Register"}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
 }
