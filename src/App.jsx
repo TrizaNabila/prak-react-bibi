@@ -3,6 +3,7 @@ import React from "react";
 import "./assets/tailwind.css";
 import Loading from "./components/Loading";
 import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Lazy Loading Components
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
@@ -19,7 +20,7 @@ const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 const FiturXyz = React.lazy(() => import("./pages/FiturXyz"));
 const Notes = React.lazy(() => import("./pages/auth/Notes"));
 const Users = React.lazy(() => import("./pages/Users"));
-const ProtectedRoute = React.lazy(() => import("./components/ProtectedRoute"));
+const Error403 = React.lazy(() => import("./pages/Error403"));
 
 function App() {
   return (
@@ -27,18 +28,53 @@ function App() {
       <Routes>
         {/* 1. Grup Main Layout (Halaman dengan Sidebar) */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/customers" element={<Customers />} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
           
-          {/* 🔥 SEHARUSNYA DI SINI (Di dalam MainLayout agar sidebar & layout dashboard tetap tampil) */}
-          <Route path="/fitur-xyz" element={<FiturXyz />} />
-          <Route path="/notes" element={<Notes />} />
-          <Route path="/users" element={<Users />} />
+          <Route path="/orders" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Orders />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/customers" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Customers />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/fitur-xyz" element={
+            <ProtectedRoute>
+              <FiturXyz />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/notes" element={
+            <ProtectedRoute>
+              <Notes />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/users" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Users />
+            </ProtectedRoute>
+          } />
           
           {/* Route Products */}
-          <Route path="/products" element={<Products />}/>
-          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/products" element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }/>
+          <Route path="/products/:id" element={
+            <ProtectedRoute>
+              <ProductDetail />
+            </ProtectedRoute>
+          } />
         </Route>
 
         {/* 2. Grup Auth Layout */}
@@ -47,6 +83,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot" element={<Forgot />} />
         </Route>
+
+        {/* Error pages directly accessible or protected */}
+        <Route path="/error-403" element={<Error403 />} />
 
         {/* 3. Catch-all Route */}
         <Route path="*" element={<NotFound />} />

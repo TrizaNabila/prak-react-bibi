@@ -1,13 +1,43 @@
-import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage, LuNetwork, LuFileText } from "react-icons/lu"; // 🔥 Ditambahkan LuNetwork dan LuFileText
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { LuLayoutDashboard, LuListOrdered, LuUsers, LuPlus, LuPackage, LuNetwork, LuFileText } from "react-icons/lu";
+import { NavLink, useNavigate } from "react-router-dom";
+import { authAPI } from "@/services/authAPI";
 
 export default function Sidebar() {
+    const [role, setRole] = useState("member");
+    const [name, setName] = useState("Guest");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const { session } = await authAPI.getSession();
+                if (session && session.user && session.user.profile) {
+                    setRole(session.user.profile.role || "member");
+                    setName(session.user.profile.name || "Member");
+                }
+            } catch (err) {
+                console.error("Error loading sidebar profile:", err);
+            }
+        };
+        loadProfile();
+    }, []);
+
     const menuClass = ({ isActive }) =>
-        `flex cursor-pointer items-center rounded-xl p-4  space-x-2
+        `flex cursor-pointer items-center rounded-xl p-4 space-x-2
         ${isActive ? 
             "text-hijau bg-green-200 font-extrabold" : 
             "text-gray-600 hover:text-hijau hover:bg-green-200 hover:font-extrabold"
         }`
+
+    const handleLogout = async () => {
+        try {
+            await authAPI.signOut();
+            navigate("/login");
+        } catch (err) {
+            console.error("Error signing out:", err);
+        }
+    };
         
     return (
         <div id="sidebar" className="flex min-h-screen w-90 flex-col bg-white p-10 shadow-lg">
@@ -17,7 +47,9 @@ export default function Sidebar() {
                 <span id="logo-title" className="font-poppins text-[48px] text-gray-900 leading-tight">
                     Sedap <b id="logo-dot" className="text-hijau">.</b>
                 </span>
-                <span id="logo-subtitle" className="font-semibold text-gray-400">Modern Admin Dashboard</span>
+                <span id="logo-subtitle" className="font-semibold text-gray-400">
+                    {role === "admin" ? "Modern Admin Dashboard" : "Member Portal"}
+                </span>
             </div>
 
             {/* List Menu */}
@@ -30,38 +62,42 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
-                    <li>
-                        <NavLink id="menu-2" to="/Orders" className={menuClass}>
-                            <LuListOrdered className="mr-4 text-xl" /> Orders
-                        </NavLink>
-                    </li>
+                    {role === "admin" && (
+                        <>
+                            <li>
+                                <NavLink id="menu-2" to="/orders" className={menuClass}>
+                                    <LuListOrdered className="mr-4 text-xl" /> Orders
+                                </NavLink>
+                            </li>
 
-                    <li>
-                        <NavLink id="menu-3" to="/Customers" className={menuClass}>
-                            <LuUsers className="mr-4 text-xl" /> Customers
-                        </NavLink>
-                    </li>
+                            <li>
+                                <NavLink id="menu-3" to="/customers" className={menuClass}>
+                                    <LuUsers className="mr-4 text-xl" /> Customers
+                                </NavLink>
+                            </li>
+                        </>
+                    )}
 
-                       {/* MENU PRODUCTS */}
+                    {/* MENU PRODUCTS */}
                     <li>
                         <NavLink id="menu-4" to="/products" className={menuClass}>
                             <LuPackage className="mr-4 text-xl" /> Products
                         </NavLink>
                     </li>
 
-
-                    {/* 🔥 MENU FITUR XYZ BARU (Diletakkan di bawah Customers sesuai gambar) */}
                     <li>
                         <NavLink id="menu-fitur-xyz" to="/fitur-xyz" className={menuClass}>
                             <LuNetwork className="mr-4 text-xl" /> Fitur Xyz
                         </NavLink>
                     </li>
 
-                    <li>
-                        <NavLink id="menu-users" to="/users" className={menuClass}>
-                            <LuUsers className="mr-4 text-xl" /> Users
-                        </NavLink>
-                    </li>
+                    {role === "admin" && (
+                        <li>
+                            <NavLink id="menu-users" to="/users" className={menuClass}>
+                                <LuUsers className="mr-4 text-xl" /> Users
+                            </NavLink>
+                        </li>
+                    )}
 
                     <li>
                         <NavLink id="menu-notes" to="/notes" className={menuClass}>
@@ -69,26 +105,15 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
 
-
                     <hr className="my-4 border-gray-100" />
-
-                    {/* TAMBAHAN SESUAI TUGAS */}
+                    
                     <li>
-                        <NavLink to="/error-400" className={menuClass}>
-                            <span className="mr-4">⚠️</span> Error 400
-                        </NavLink>
-                    </li>
-
-                    <li>
-                        <NavLink to="/error-401" className={menuClass}>
-                            <span className="mr-4">🔒</span> Error 401
-                        </NavLink>
-                    </li>
-
-                    <li>
-                        <NavLink to="/error-403" className={menuClass}>
-                            <span className="mr-4">⛔</span> Error 403
-                        </NavLink>
+                        <button 
+                            onClick={handleLogout} 
+                            className="w-full flex cursor-pointer items-center rounded-xl p-4 space-x-2 text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors"
+                        >
+                            <span className="mr-4">🚪</span> Logout
+                        </button>
                     </li>
 
                 </ul>
@@ -108,12 +133,7 @@ export default function Sidebar() {
             <div id="sidebar-footer" className="mt-auto">
                 <div id="footer-card" className="bg-hijau px-4 py-6 rounded-3xl shadow-lg mb-10 flex items-center relative overflow-hidden">
                     <div id="footer-text" className="text-white text-sm z-10 w-2/3">
-                        <p className="mb-3 leading-tight">Please organize your menus through button below!</p>
-                        <div id="add-menu-button" className="flex justify-center items-center p-2 bg-white rounded-md space-x-2 cursor-pointer active:scale-95 transition-transform shadow-sm">
-                            <span className="text-gray-600 font-bold flex items-center text-xs">
-                                <LuPlus className="mr-1" /> Add Menus
-                            </span>
-                        </div>
+                        <p className="mb-3 leading-tight">{role === "admin" ? "Hello Admin!" : "Order and get tier discount!"}</p>
                     </div>
 
                     <img 
@@ -125,7 +145,7 @@ export default function Sidebar() {
                 
                 <div className="flex flex-col">
                     <span className="font-bold text-gray-800 text-sm italic">
-                        Sedap Restaurant Admin Dashboard
+                        Sedap Restaurant Dashboard
                     </span>
                     <p className="font-light text-gray-400 text-[10px] tracking-wide">
                         © 2026 All Right Reserved

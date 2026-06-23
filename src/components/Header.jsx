@@ -1,8 +1,28 @@
+import { useEffect, useState } from "react";
 import { FaBell, FaSearch } from "react-icons/fa";
 import { FcAreaChart } from "react-icons/fc";
 import { SlSettings } from "react-icons/sl";
+import { authAPI } from "@/services/authAPI";
 
 export default function Header() {
+    const [name, setName] = useState("Triza Nabila");
+    const [role, setRole] = useState("member");
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const { session } = await authAPI.getSession();
+                if (session && session.user && session.user.profile) {
+                    setName(session.user.profile.name || session.user.email);
+                    setRole(session.user.profile.role || "member");
+                }
+            } catch (err) {
+                console.error("Error loading header profile:", err);
+            }
+        };
+        loadProfile();
+    }, []);
+
     return (
         <div className="flex justify-between items-center p-6 bg-transparent">
             <div className="relative w-full max-w-lg">
@@ -28,7 +48,9 @@ export default function Header() {
                 <div className="p-3 bg-red-100 rounded-2xl text-red-500 cursor-pointer"><SlSettings /></div>
 
                 <div className="flex items-center space-x-4 border-l pl-4 border-gray-300">
-                    <span className="text-sm">Hello, <b>Triza Nabila Ariely</b></span>
+                    <span className="text-sm">
+                        Hello, <b>{name}</b> <span className="text-xs text-gray-400 font-normal">({role})</span>
+                    </span>
                     <img src="/img/foto.png" className="w-10 h-10 rounded-full" alt="profile" />
                 </div>
             </div>

@@ -3,32 +3,39 @@ import { Navigate, useLocation } from "react-router-dom"
 import { authAPI } from "@/services/authAPI"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
-const DEV_AUTH = import.meta.env.VITE_DEV_AUTH === "true"
-
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute({ children, allowedRoles }) {
     const [checking, setChecking] = useState(true)
     const [authenticated, setAuthenticated] = useState(false)
+    const [authorized, setAuthorized] = useState(true)
     const location = useLocation()
 
     useEffect(() => {
         const checkSession = async () => {
             try {
-                if (DEV_AUTH) {
-                    const { session } = await authAPI.getSession()
-                    setAuthenticated(Boolean(session && session.user))
+                const { session } = await authAPI.getSession()
+                
+                if (session && session.user) {
+                    setAuthenticated(true)
+                    
+                    if (allowedRoles) {
+                        const userRole = session.user.profile?.role || "member"
+                        setAuthorized(allowedRoles.includes(userRole))
+                    } else {
+                        setAuthorized(true)
+                    }
                 } else {
-                    const { session } = await authAPI.getSession()
-                    setAuthenticated(Boolean(session))
+                    setAuthenticated(false)
                 }
             } catch (err) {
                 setAuthenticated(false)
+                setAuthorized(false)
             } finally {
                 setChecking(false)
             }
         }
 
         checkSession()
-    }, [])
+    }, [allowedRoles])
 
     if (checking) {
         return (
@@ -40,6 +47,10 @@ export default function ProtectedRoute({ children }) {
 
     if (!authenticated) {
         return <Navigate to="/login" state={{ from: location }} replace />
+    }
+
+    if (!authorized) {
+        return <Navigate to="/error-403" replace />
     }
 
     return children
